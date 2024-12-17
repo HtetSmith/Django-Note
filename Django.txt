@@ -1,0 +1,212 @@
+Setting up django
+route the path first
+
+$condaPath = "C:\Users\<YourUsername>\miniconda3\condabin"
+[Environment]::SetEnvironmentVariable("Path", $env:Path + ";$condaPath", "User")
+
+
+Ready the powershell if still didnot work after conda activate my_environment
+
+conda init powershell
+
+
+to check the list of env that I created 
+
+conda info --envs
+
+to activate env 
+conda activate my_Env
+
+To deactivate env
+
+conda deactivate my_Env
+
+Installing django 
+command lines 
+1. conda install django
+
+Or for normal python distributions 
+2. pip install django
+
+Should use django-admin tool which is already installed along with Django in the first place.
+
+django-admin
+
+To create project 
+django-admin startproject first_project
+
+
+About the files that appear after creating project.
+
+First file(__init__.py) 
+This file lets's the python know that this directory can be treated as a package due to it's name __init__.py and it is also blank Python script.
+
+settings.py
+This is where you will store all your project settings
+
+urls.py(Expect to use a lot of usage of regular expression)
+
+This is a files for storing all the URL patterns for project.So it is just storing all the different pages of web application and how they should connect to the end user.
+
+wsgi.py
+
+This is a python script that acts as the web server Gateway interface and help us to deploy the application to production.
+
+manage.py
+
+This is a file that will be using a lot of the time. It will be associates with many commands as we build our web app!
+
+To run django web project on server 
+
+Use this commands - python manage.py runserver
+
+And it will show a bunch of stuff and at the buttom it will show someting like this:
+Django version (version), using settings 
+'first_project.settings'
+Starting development server at
+http://127.0.0.1:8000/
+
+And to run in browser copy and paste that url in browser. http://127.0.0.1:8000/
+
+Migration warning 
+This has to do with database and how to connect them to Django
+
+So what is migration?
+
+It's allow user to mover databases from one design to another and this is also reversible.
+So you can "migrate" your database.
+
+step by step of letting django know that I have created app.
+
+step1 go to settings.py of project folder.
+steep 2 find install_app and add 'appname'. eg --'first_app'
+
+Creating view
+
+In view.py 
+from django.http import HttpResponse
+
+Mapping
+
+Visualizing the Flow
+Here’s the request-response flow in simplified steps:
+
+Browser Request → Django URL Dispatcher (urls.py)
+Match Found → Django calls the mapped view function (views.py)
+View Function → Processes the request and returns a response.
+Response → Sent back to the browser.
+
+User Enters URL:
+
+http://localhost:8000/ → Goes to the home view.
+http://localhost:8000/menu/ → Goes to the menu view.
+http://localhost:8000/order/ → Goes to the order view.
+What Happens:
+
+urls.py maps the request to the appropriate view.
+The view function processes the request and sends an HttpResponse.
+What the User Sees:
+
+For / → "Welcome to our restaurant! Please see our menu."
+For /menu/ → "Menu: Pizza, Pasta, Salad, Dessert."
+For /order/ → "Thank you for placing your order!"
+
+Summary
+
+The URL dispatcher (urls.py) is like the restaurant host who routes you to the correct table (view).
+The view function (views.py) is like the waiter who takes your request and responds appropriately.
+
+
+To get http stuff working you need to import below two in view.py of app's diratory
+from django.shortcuts import render
+from django.http import HttpResponse 
+
+Templates
+Templates are a key part to understanding how django really works and interacts with my website.
+
+Connecting templates with models to display data created dynamically.
+
+Template will contain the static parts of an html page(parts that are always the same)
+
+Template tags
+They have thier own special syntax. These syntax allows you to inject dynamic content that your Django App's views will produce, effecting the final HTML.
+
+
+step 1 go to setting.py at project folder and import os. Than type:
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+TEMPLATES_DIR = os.path.join(BASE_DIR,"templates")
+
+Create folder "Static" inside create images folder."Static" folder is not only for media but also for css and javascript.
+
+For static media
+setting mhar edit 
+STATIC_DIR = BASE_DIR / 'static'
+
+After that create variable and list of STATICFILES_DIRS = [
+	STATIC_DIR
+]   
+
+Always put under Doc type html file.
+{% load staticfiles %}
+<img src="{%static "images/pic.jpg"%}" alt="Uh Oh, didn't show!">
+
+
+For static Css
+
+Create folder "Static" inside create CSS/mystyles.css
+To use CSS in HTML
+<link rel="stylesheet" href="{% static "CSS/mystyles.css" %}"/>
+
+Summary Level 1 work flow
+
+ajango-admin startproject first_project
+cd first_project
+python manage.py startapp first_app
+
+Django Level 2
+
+Django models
+
+Modals are the importants part of allowing django to incorporate with a database into a Django Project. Django comes with SQLite to work for simple examples but it can also connect to PosrgreSQL, mySQL by switching the actual engine.
+You just need to edit the ENGINE parameter used for DATABASES in setting.py file to change database engine.
+
+Creating model
+
+To create model we use class structure inside of the relevant application models.py file
+
+This class object will be a subclass of Django's built-in class:
+django.db.models.Model
+
+rach attribute of the class represents a field, which is just like a column name with constraints in SQL.
+
+python manage.py migrate
+
+After that 
+python manage.py makemigrations app1 <--App name
+Then 
+python manage.py migrate
+
+So now we can use the shell from the manage,py file to play around with the models
+
+To using more convenient with the admin interface with the models. we need to register them to our application's admin.py file.
+
+You can do that with this code
+from django.contrib import admin
+from app name -->app.models import Model1,Model2 eg. Topic,Web
+admin.site.register(Model1)Topic
+admin.site.register(Model2)Web
+
+In order to fully use the database and the Admin, we will need to create a "superuser"
+
+Creating superuser command
+python manage.py createsuperuser
+
+ 
+
+Difference between Django project and Django Application
+
+First: In the views.py file we import any models that we will need to use.
+Second: Use the view to quaary the model for data that we will need 
+Third: Pass results from the model to the template
+Fourth: Edit the template so that it is ready to accept and display the data from the model
+fifth:Map a URL to the view
