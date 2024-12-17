@@ -201,10 +201,7 @@ In order to fully use the database and the Admin, we will need to create a "supe
 Creating superuser command
 python manage.py createsuperuser
 
- 
-
-Difference between Django project and Django Application
-
+Python know for MTV.
 First: In the views.py file we import any models that we will need to use.
 Second: Use the view to quaary the model for data that we will need 
 Third: Pass results from the model to the template
